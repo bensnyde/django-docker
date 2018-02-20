@@ -24,9 +24,8 @@ RUN apt-get update && apt-get install -y \
     vim
 RUN easy_install3 pip
 
-# Handle urllib3 InsecurePlatformWarning
-RUN apt-get install -y libffi-dev libssl-dev libpython3.5-dev
-RUN pip install urllib3[security] requests[security] ndg-httpsclient pyasn1
+# Install Python libraries
+RUN pip3 install urllib3 requests[security] ndg-httpsclient pyasn1
 
 # Configure Django project
 ADD . /code
@@ -36,7 +35,7 @@ RUN mkdir /logs
 RUN mkdir /logs/nginx
 RUN mkdir /logs/gunicorn
 WORKDIR /code
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 RUN chmod ug+x /code/initialize.sh
 
 # Expose ports
