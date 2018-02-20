@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 
 # Enable production settings by default; for development, this can be set to 
 # `false` in `docker run --env`
@@ -17,16 +17,15 @@ RUN apt-get update && apt-get install -y \
     libmysqlclient-dev \
     mysql-server \
     nginx \
-    python-dev \
-    python-mysqldb \
-    python-setuptools \
+    python3-dev \
+    python3-mysqldb \
+    python3-setuptools \
     supervisor \
     vim
-RUN easy_install pip
+RUN easy_install3 pip
 
-# Handle urllib3 InsecurePlatformWarning
-RUN apt-get install -y libffi-dev libssl-dev libpython2.7-dev
-RUN pip install urllib3[security] requests[security] ndg-httpsclient pyasn1
+# Install Python libraries
+RUN pip3 install urllib3 requests[security] ndg-httpsclient pyasn1
 
 # Configure Django project
 ADD . /code
@@ -36,7 +35,7 @@ RUN mkdir /logs
 RUN mkdir /logs/nginx
 RUN mkdir /logs/gunicorn
 WORKDIR /code
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 RUN chmod ug+x /code/initialize.sh
 
 # Expose ports
